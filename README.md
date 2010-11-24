@@ -1,0 +1,1 @@
+This is the static pages repository. You're probably looking for [https://github.com/arskom/soaplib](https://github.com/arskom/soaplib)

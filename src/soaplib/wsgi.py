@@ -404,7 +404,7 @@ class Application(object):
 
         return retval
 
-    def __handle_soap_request(self, req_env, start_response, url):
+    def __handle_soap_request(self, req_env, request, start_response, url):
         """
         This function is too big.
         """
@@ -424,9 +424,8 @@ class Application(object):
                 start_response(HTTP_405, http_resp_headers.items())
                 return ['']
 
-            input = req_env.get('wsgi.input')
             length = req_env.get("CONTENT_LENGTH")
-            body = input.read(int(length))
+            body = request.body
 
             try:
                 service = None
@@ -600,7 +599,7 @@ class Application(object):
 
         return [fault_str]
 
-    def __call__(self, req_env, start_response, wsgi_url=None):
+    def __call__(self, req_env, request, start_response, wsgi_url=None):
         '''
         This method conforms to the WSGI spec for callable wsgi applications
         (PEP 333). It looks in environ['wsgi.input'] for a fully formed soap
@@ -620,7 +619,7 @@ class Application(object):
         if self.__is_wsdl_request(req_env):
             return self.__handle_wsdl_request(req_env, start_response, url)
         else:
-            return self.__handle_soap_request(req_env, start_response, url)
+            return self.__handle_soap_request(req_env, request, start_response, url)
 
     def on_call(self, environ):
         '''
